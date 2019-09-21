@@ -16,7 +16,12 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <CharacterInput name={'hi Rudy'} />
+        <CharacterInput
+          placeHolder='YYYY/MM/DD'
+          binary='1111011011'
+          length={10}
+          handleChange={(text) => console.log(text)}
+        />
       </View>
     );
   }
