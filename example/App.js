@@ -16,7 +16,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <CharacterInput name={'hi'} />
+        <CharacterInput name={'hi Rudy'} />
       </View>
     );
   }
