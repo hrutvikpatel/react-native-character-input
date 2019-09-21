@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Text } from 'react-native';
 
 interface CharacterInput {
@@ -10,3 +10,5 @@ interface CharacterInput {
     <Text>{props.name}</Text>
   );
 };
+
+export default CharacterInput;
