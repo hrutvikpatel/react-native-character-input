@@ -17,7 +17,7 @@ interface SingleInput {
   disabledInputStyle?: object
 }
 
-const SingleInput: React.SFC<SingleInput> = (props) => {
+const SingleInput: React.SFC<SingleInput> = (props: SingleInput) => {
   return (
     <Input
       value={props.value}
@@ -61,9 +61,9 @@ const SingleInput: React.SFC<SingleInput> = (props) => {
       ]}
 
 
-      onChangeText={(text) => props.onChange(props.index, text)}
+      onChangeText={(text: string) => props.onChange(props.index, text)}
       disabled={!props.show}
-      ref={(ref) => props.setRef(props.index, ref)}
+      ref={(ref: any) => props.setRef(props.index, ref)}
       selectTextOnFocus
       maxLength={1}
       keyboardType={props.keyboardType}

@@ -3,18 +3,18 @@ import { View } from 'react-native';
 
 import SingleInput from './SingleInput';
 
-interface CharacterInput {
+export interface CharacterInput {
   placeHolder: string,
   binary: string,
   length: number,
-  handleChange: Function,
+  handleChange: (raw: string) => void,
   keyboardType?: string
 }
 
-const CharacterInput: React.SFC<CharacterInput> = (props) => {
-  const placeHolderCharArray = props.placeHolder.split('');
-  const [string, setString] = React.useState(Array(props.length).fill(''));
-  const binary = props.binary.split('');
+const CharacterInput: React.SFC<CharacterInput> = (props: CharacterInput) => {
+  const placeHolderCharArray: Array<string> = props.placeHolder.split('');
+  const [string, setString] = React.useState<Array<string>>(Array(props.length).fill(''));
+  const binary: Array<string> = props.binary.split('');
   const refs: never[] | { 
     focus: () => void;
     shake: () => void;
@@ -24,13 +24,13 @@ const CharacterInput: React.SFC<CharacterInput> = (props) => {
     props.handleChange(string.join(''));
   }, [string]);
 
-  const setChar = (i: number, c: string) => {
-    const temp = [...string];
+  const setChar = (i: number, c: string): void => {
+    const temp: Array<string> = [...string];
     temp[i] = c;
     setString(temp);
   };
 
-  const goBack = (i: number) => {
+  const goBack = (i: number): void => {
     if (i === 0) {
       refs[i].shake();
     } else if (i > 0 && i <= props.length - 1 && binary[i - 1] === '1') {
@@ -40,7 +40,7 @@ const CharacterInput: React.SFC<CharacterInput> = (props) => {
     }
   };
 
-  const goForward = (i: number) => {
+  const goForward = (i: number): void => {
     if (i === props.length - 1) {
       refs[i].shake();
     } else if (i >= 0 && i < props.length - 1 && binary[i + 1] === '1') {
@@ -50,7 +50,7 @@ const CharacterInput: React.SFC<CharacterInput> = (props) => {
     }
   };
 
-  const onChange = (i: number, c: string) => {
+  const onChange = (i: number, c: string): void => {
     if (c.length === 1) {
       goForward(i);
       setChar(i, c);
@@ -62,11 +62,11 @@ const CharacterInput: React.SFC<CharacterInput> = (props) => {
     }
   };
 
-  const setRef = (i: number, ref: any) => {
+  const setRef = (i: number, ref: any): void => {
     refs[i] = ref;
   };
 
-  const onKeyPress = (i: number, e: any) => {
+  const onKeyPress = (i: number, e: any): void => {
     if (i === 0 && e.key === 'Backspace') {
       refs[i].shake();
     }
