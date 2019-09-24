@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { View } from 'react-native';
 
-import SingleInput from './SingleInput';
+import SingleInput, { typeRef, InputStyle } from './SingleInput';
 
-export interface CharacterInput {
+export interface CharacterInput extends InputStyle {
   placeHolder: string,
   binary: string,
   length: number,
@@ -15,10 +15,7 @@ const CharacterInput: React.SFC<CharacterInput> = (props: CharacterInput) => {
   const placeHolderCharArray: Array<string> = props.placeHolder.split('');
   const [string, setString] = React.useState<Array<string>>(Array(props.length).fill(''));
   const binary: Array<string> = props.binary.split('');
-  const refs: never[] | { 
-    focus: () => void;
-    shake: () => void;
-  }[] = [];
+  const refs: Array<typeRef> = [];
 
   React.useEffect(() => {
     props.handleChange(string.join(''));
@@ -62,14 +59,13 @@ const CharacterInput: React.SFC<CharacterInput> = (props: CharacterInput) => {
     }
   };
 
-  const setRef = (i: number, ref: any): void => {
+  const setRef = (i: number, ref: typeRef): void => {
     refs[i] = ref;
   };
 
   const onKeyPress = (i: number, e: any): void => {
-    if (i === 0 && e.key === 'Backspace') {
-      refs[i].shake();
-    }
+    if (e.key !== 'Backspace') return;
+    if (i === 0) refs[i].shake();
   };
 
   return (
@@ -83,6 +79,7 @@ const CharacterInput: React.SFC<CharacterInput> = (props: CharacterInput) => {
     >
       {string.map((c: string, i: number) => (
         <SingleInput
+          {...props}
           key={i}
           placeHolder={placeHolderCharArray[i]}
           onChange={onChange}
@@ -97,9 +94,5 @@ const CharacterInput: React.SFC<CharacterInput> = (props: CharacterInput) => {
     </View>
   );
 };
-
-CharacterInput.defaultProps = {
-  keyboardType: "default"
-}
 
 export default CharacterInput;

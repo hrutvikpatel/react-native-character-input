@@ -20,7 +20,7 @@ export default class App extends Component {
           placeHolder='YYYY/MM/DD'
           binary='1111011011'
           length={10}
-          handleChange={(text) => console.log(text)}
+          handleChange={(text) => console.log('text', text)}
         />
       </View>
     );

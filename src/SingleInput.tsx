@@ -1,8 +1,28 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { Input } from 'react-native-elements';
+import { StyleSheet } from 'react-native';
 
-interface SingleInput {
+import * as Styles from './SingleInput.style';
+
+export interface typeRef {
+  focus: () => void;
+  shake: () => void;
+  clear: () => void;
+};
+
+enum InputType { underlined, outlined, contained };
+
+export interface InputStyle {
+  inputType?: InputType,
+  containerStyle?: StyleSheet.styles,
+  inputStyle?: StyleSheet.styles,
+  inputContainerStyle?: StyleSheet.styles,
+  disabledInputStyle?: StyleSheet.styles,
+  placeHolderTextColor?: StyleSheet.styles
+}
+
+export interface SingleInputProps extends InputStyle {
   value: string,
   placeHolder: string,
   show: boolean,
@@ -10,69 +30,48 @@ interface SingleInput {
   index: number,
   onChange: Function,
   setRef: Function,
-  onKeyPress: Function,
-  containerStyle?: object,
-  inputStyle?: object,
-  inputContainerStyle?: object,
-  disabledInputStyle?: object
+  onKeyPress: Function
 }
 
-const SingleInput: React.SFC<SingleInput> = (props: SingleInput) => {
+const SingleInput: React.FunctionComponent<SingleInputProps> = (props) => {
+
+  const getStyles = (type: InputType): StyleSheet.styles => {
+    switch (type) {
+      case InputType.outlined: return Styles.outlinedStyles;
+      case InputType.contained: return Styles.containedStyles;
+      default: return Styles.underlinedStyles;
+    }
+  }
+
+  const styles: StyleSheet.styles = getStyles(props.inputType!);
+
   return (
     <Input
       value={props.value}
       placeholder={props.placeHolder}
-      placeholderTextColor="grey"
-      containerStyle={[
-          {
-            backgroundColor: 'transparent',
-            paddingBottom: 10,
-            width: 30,
-            alignSelf: 'center',
-          },
-          props.containerStyle
-      ]}
-      inputStyle={[
-        {
-          color: 'grey',
-          fontSize: 20,
-          fontWeight: 'bold',
-          width: 24,
-          textAlign: 'center',
-          alignSelf: 'center',
-        },
-        props.inputStyle
-      ]}
-      inputContainerStyle={[
-        {
-          borderBottomWidth: 2,
-          borderBottomColor: 'grey',
-          width: 24,
-          alignSelf: 'center',
-        },
+      placeholderTextColor={props.placeHolderTextColor ? props.placeHolderTextColor: "grey"}
+      containerStyle={[ styles.containerStyle, props.containerStyle ]}
+      inputStyle={[ styles.inputStyle, props.inputStyle ]}
+      inputContainerStyle={[ 
+        styles.inputContainerStyle,
         props.inputContainerStyle,
-        !props.show
-          ? { borderBottomWidth: 0, paddingTop: 1, paddingBottom: 1 }
-          : {},
+        props.show ? styles.hide : {},
       ]}
-      disabledInputStyle={[
-        { color: 'grey', fontWeight: 'bold' },
-        props.disabledInputStyle,
-      ]}
-
-
+      disabledInputStyle={[ styles.disabledInputStyle, props.disabledInputStyle ]}
+      
       onChangeText={(text: string) => props.onChange(props.index, text)}
       disabled={!props.show}
       ref={(ref: any) => props.setRef(props.index, ref)}
-      selectTextOnFocus
       maxLength={1}
       keyboardType={props.keyboardType}
-      onKeyPress={({ nativeEvent }) => props.onKeyPress(props.index, nativeEvent)}
+      onKeyPress={(nativeEvent: any) => props.onKeyPress(props.index, nativeEvent)}
     />
   );
 };
 
 SingleInput.defaultProps = {
+  keyboardType: 'default',
+  inputType: InputType.underlined,
   containerStyle: {},
   inputStyle: {},
   inputContainerStyle: {},
