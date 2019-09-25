@@ -79,6 +79,7 @@ const CharacterInput: React.SFC<CharacterInput> = (props: CharacterInput) => {
     >
       {string.map((c: string, i: number) => (
         <SingleInput
+          {...props}
           key={i}
           placeHolder={placeHolderCharArray[i]}
           onChange={onChange}
@@ -88,7 +89,6 @@ const CharacterInput: React.SFC<CharacterInput> = (props: CharacterInput) => {
           keyboardType={props.keyboardType}
           value={string[i]}
           onKeyPress={onKeyPress}
-          {...props}
         />
       ))}
     </View>
