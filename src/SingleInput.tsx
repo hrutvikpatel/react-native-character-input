@@ -33,8 +33,8 @@ export interface SingleInputProps extends InputStyle {
   onKeyPress: Function
 }
 
-const SingleInput: React.FunctionComponent<SingleInputProps> = (props) => {
-
+const SingleInput: React.FunctionComponent<SingleInputProps> = (props: SingleInputProps) => {
+  console.log(props);
   const getStyles = (type: InputType): StyleSheet.styles => {
     switch (type) {
       case InputType.outlined: return Styles.outlinedStyles;
@@ -44,6 +44,8 @@ const SingleInput: React.FunctionComponent<SingleInputProps> = (props) => {
   }
 
   const styles: StyleSheet.styles = getStyles(props.inputType!);
+
+  console.log(props.inputStyle, props.index, styles);
 
   return (
     <Input

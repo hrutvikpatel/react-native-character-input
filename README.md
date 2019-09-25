@@ -17,6 +17,7 @@ import CharacterInput from 'react-native-character-input';
 		binary='1111011011'
 		length={10}
 		handleChange={(text) => setText(text)}
+		inputType='contained'
 	/>
 ```
 ## Available props

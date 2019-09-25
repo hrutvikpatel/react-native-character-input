@@ -21,6 +21,21 @@ export default class App extends Component {
           binary='1111011011'
           length={10}
           handleChange={(text) => console.log('text', text)}
+          inputType='underlined'
+        />
+        <CharacterInput
+          placeHolder='(###)-###-####'
+          binary='01110011101111'
+          length={14}
+          handleChange={(text) => console.log('text', text)}
+          inputType='outlined'
+        />
+        <CharacterInput
+          placeHolder='Time 00:00'
+          binary='0000011011'
+          length={10}
+          handleChange={(text) => console.log('text', text)}
+          inputType='contained'
         />
       </View>
     );
