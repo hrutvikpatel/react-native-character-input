@@ -1,10 +1,16 @@
 import * as React from 'react';
 import { View } from 'react-native';
 
-import SingleInput, { typeRef, InputStyle } from './SingleInput';
+import SingleInput, { ITypeRef, IInputStyle } from './SingleInput';
+
+
+enum MoveType {
+  Forward,
+  Back
+};
 
 // reexport in index
-export interface CharacterInput extends InputStyle {
+export interface CharacterInput extends IInputStyle {
   placeHolder: string,
   binary: string,
   length: number,
@@ -12,83 +18,73 @@ export interface CharacterInput extends InputStyle {
   keyboardType?: string
 }
 
-// overall I think the impementation of this class could be a lot cleaner and easier to read
-// try to make it cleaner.......
 
-const CharacterInput: React.SFC<CharacterInput> = (props: CharacterInput) => {
-  // typically you type this as: string[] not Array<string>
-  const placeHolderCharArray: Array<string> = props.placeHolder.split('');
-  // change these variable names
-  const [string, setString] = React.useState<Array<string>>(Array(props.length).fill(''));
-  // string[]
-  const binary: Array<string> = props.binary.split('');
-  // typeRef[]
-  const refs: Array<typeRef> = [];
+const CharacterInput: React.FunctionComponent<CharacterInput> = (props: CharacterInput) => {
+  const placeHolderCharArray: string[] = props.placeHolder.split('');
+  const [value, setValue] = React.useState<string[]>(Array(props.length).fill(''));
+  const showChar: string[] = props.binary.split('');
+  const singleInputRef: ITypeRef[] = [];
 
   React.useEffect(() => {
-    // change this variable name.... you should never name a variable string...
-    props.handleChange(string.join(''));
-  }, [string]);
+    props.handleChange(value.join(''));
+  }, [value]);
 
-  // not easy to understand what this method does.... very cryptic
-  const setChar = (i: number, c: string): void => {
-    const temp: Array<string> = [...string];
-    temp[i] = c;
-    setString(temp);
+  const updateChangedChar = (index: number, char: string): void => {
+    const temp: string[] = [...value];
+    temp[index] = char;
+    setValue(temp);
   };
 
+  const validateIndex = (index: number): boolean => {
+    if (index > 0 && index <= props.length - 1) return true;
+    return false; 
+  }
 
-  //////////////////////
-
-  // need better variable name... i has no context
-  const goBack = (i: number): void => {
-    if (i === 0) {
-      refs[i].shake();
-    } else if (i > 0 && i <= props.length - 1 && binary[i - 1] === '1') {
-      refs[i - 1].focus();
-    } else if (i - 1 > 0) {
-      goBack(i - 1);
+  const traverseInputs = (moveType: MoveType, charPos: number): void => {
+    if (moveType === MoveType.Forward) {
+      if (charPos === props.length - 1) {
+        singleInputRef[charPos].shake();
+      } 
+      else if (validateIndex(charPos) && showChar[charPos + 1] === '1') {
+        singleInputRef[charPos + 1].focus();
+      }
+      else if (charPos + 1 < props.length - 1) {
+        traverseInputs(MoveType.Forward, charPos + 1);
+      }
+    }
+    else if (moveType === MoveType.Back) {
+      if (charPos === 0) {
+        singleInputRef[charPos].shake();
+      } 
+      else if (validateIndex(charPos) && showChar[charPos - 1] === '1') {
+        singleInputRef[charPos - 1].focus();
+      } 
+      else if (charPos - 1 > 0) {
+        traverseInputs(MoveType.Back, charPos - 1);
+      }
     }
   };
 
-  const goForward = (i: number): void => {
-    if (i === props.length - 1) {
-      refs[i].shake();
-    } else if (i >= 0 && i < props.length - 1 && binary[i + 1] === '1') {
-      refs[i + 1].focus();
-    } else if (i + 1 < props.length - 1) {
-      goForward(i + 1);
+  const onChange = (inputPos: number, char: string): void => {
+    if (char.length === 1) {
+      traverseInputs(MoveType.Forward, inputPos);
+      updateChangedChar(inputPos, char);
+    }
+    else if (char.length === 0) {
+      traverseInputs(MoveType.Back, inputPos);
+      updateChangedChar(inputPos, char);
+    }
+    else if (char.length > 1) {
+      singleInputRef[inputPos].shake();
     }
   };
 
-  // goBack and goForward are essentially the same function with a couple of differences
-  // you should really try to combine these functions and make the differences between them a parameter
-  // Doesnt make sense to duplicate code like this and in the long run makes your stuff way harder to maintain
-
-  /////////////////////
-
-  // really bad parameter names on all of these functions
-  const onChange = (i: number, c: string): void => {
-    if (c.length === 1) {
-      goForward(i);
-      setChar(i, c);
-    } else if (c.length === 0) {
-      goBack(i);
-      setChar(i, c);
-    } else if (c.length > 1) {
-      refs[i].shake();
-    }
+  const setInputRef = (inputPos: number, inputRef: ITypeRef): void => {
+    singleInputRef[inputPos] = inputRef;
   };
 
-  const setRef = (i: number, ref: typeRef): void => {
-    refs[i] = ref;
-  };
-
-  const onKeyPress = (i: number, e: any): void => {
-    // there must be a better way to do this??
-    // use the keyCode not a string
-    if (e.key !== 'Backspace') return;
-    if (i === 0) refs[i].shake();
+  const onKeyPress = (inputPos: number, event: any): void => {
+    if (event.key !== 'Backspace' && inputPos === 0) singleInputRef[inputPos].shake();
   };
 
   return (
@@ -100,20 +96,17 @@ const CharacterInput: React.SFC<CharacterInput> = (props: CharacterInput) => {
         display: 'flex',
       }}
     >
-      {/* try to avoid passing c, i as parameters everywhere. No one knows what c and i means except you lol */}
-      {string.map((c: string, i: number) => (
+      {value.map((char: string, currentCharIndex: number) => (
         <SingleInput
           {...props}
-          // you're never supposed to an index as a key.. doesn't really matter in this case but try to avoid it
-          // React Fiber doesn't work well with indices for keys
-          key={i}
-          placeHolder={placeHolderCharArray[i]}
+          key={currentCharIndex}
+          placeHolder={placeHolderCharArray[currentCharIndex]}
           onChange={onChange}
-          index={i}
-          show={binary[i] === '1'}
-          setRef={setRef}
+          index={currentCharIndex}
+          show={showChar[currentCharIndex] === '1'}
+          setRef={setInputRef}
           keyboardType={props.keyboardType}
-          value={string[i]}
+          value={value[currentCharIndex]}
           onKeyPress={onKeyPress}
         />
       ))}

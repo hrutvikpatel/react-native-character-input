@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const underlinedStyles = StyleSheet.create({
+export const UnderlinedStyles = StyleSheet.create({
     containerStyle: {
         backgroundColor: 'transparent',
         paddingBottom: 10,
@@ -32,7 +32,7 @@ export const underlinedStyles = StyleSheet.create({
     },
 });
 
-export const outlinedStyles = StyleSheet.create({
+export const OutlinedStyles = StyleSheet.create({
     containerStyle: {
         backgroundColor: 'transparent',
         paddingBottom: 10,
@@ -65,7 +65,7 @@ export const outlinedStyles = StyleSheet.create({
     },
 });
 
-export const containedStyles = StyleSheet.create({
+export const ContainedStyles = StyleSheet.create({
     containerStyle: {
         backgroundColor: 'black',
         paddingBottom: 10,
