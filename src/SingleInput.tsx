@@ -34,8 +34,9 @@ export interface ISingleInputProps extends IInputStyle {
   index: number,
   // Specify the actual function signature
   onChange: Function,
-  setRef: Function,
-  onKeyPress: Function
+  setRef: (inputPos: number, inputRef: ITypeRef) => void,
+  onKeyPress: (inputPos: number, event: any, inputValue: string) => void,
+  clearInputOnFocus: (inputPos: number) => void
 }
 
 const SingleInput: React.FunctionComponent<ISingleInputProps> = (props: ISingleInputProps) => {
@@ -66,7 +67,8 @@ const SingleInput: React.FunctionComponent<ISingleInputProps> = (props: ISingleI
       ref={(ref: any) => props.setRef(props.index, ref)}
       maxLength={1}
       keyboardType={props.keyboardType}
-      onKeyPress={(nativeEvent: any) => props.onKeyPress(props.index, nativeEvent)}
+      onKeyPress={(nativeEvent: any) => props.onKeyPress(props.index, nativeEvent, props.value)}
+      onFocus={() => props.clearInputOnFocus(props.index)}
     />
   );
 };

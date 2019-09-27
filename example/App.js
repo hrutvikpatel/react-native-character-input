@@ -18,7 +18,7 @@ export default class App extends Component {
       <View style={styles.container}>
         <CharacterInput
           placeHolder='YYYY/MM/DD'
-          binary='1111011011'
+          showCharBinary='1111011011'
           length={10}
           handleChange={(text) => console.log('text', text)}
           inputType='underlined'

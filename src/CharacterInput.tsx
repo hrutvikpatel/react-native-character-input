@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 import SingleInput, { ITypeRef, IInputStyle } from './SingleInput';
 
@@ -12,17 +12,22 @@ enum MoveType {
 // reexport in index
 export interface CharacterInput extends IInputStyle {
   placeHolder: string,
-  binary: string,
-  length: number,
+  showCharBinary: string,
   handleChange: (raw: string) => void,
   keyboardType?: string
 }
 
 
 const CharacterInput: React.FunctionComponent<CharacterInput> = (props: CharacterInput) => {
+  if (props.placeHolder.length !== props.showCharBinary.length)
+    throw 'Length of placeHolder and showCharBinary strings must be the same';
+
+  const inputLength: number = props.placeHolder.length;
   const placeHolderCharArray: string[] = props.placeHolder.split('');
-  const [value, setValue] = React.useState<string[]>(Array(props.length).fill(''));
-  const showChar: string[] = props.binary.split('');
+  const [value, setValue] = React.useState<string[]>(Array(inputLength).fill(''));
+  const [isLastInputFilled, setIsLastInputFilled] = React.useState<boolean>(false);
+
+  const showChar: string[] = props.showCharBinary.split('');
   const singleInputRef: ITypeRef[] = [];
 
   React.useEffect(() => {
@@ -35,30 +40,31 @@ const CharacterInput: React.FunctionComponent<CharacterInput> = (props: Characte
     setValue(temp);
   };
 
-  const validateIndex = (index: number): boolean => {
-    if (index > 0 && index <= props.length - 1) return true;
-    return false; 
-  }
-
   const traverseInputs = (moveType: MoveType, charPos: number): void => {
     if (moveType === MoveType.Forward) {
-      if (charPos === props.length - 1) {
+      console.log('forward', {
+        charPos,
+        showChar: showChar[charPos + 1] === '1',
+      })
+
+      if (charPos === inputLength - 1) {
         singleInputRef[charPos].shake();
-      } 
-      else if (validateIndex(charPos) && showChar[charPos + 1] === '1') {
+      }
+      else if (charPos >= 0 && charPos < inputLength - 1 && showChar[charPos + 1] === '1') {
         singleInputRef[charPos + 1].focus();
       }
-      else if (charPos + 1 < props.length - 1) {
+      else if (charPos + 1 < inputLength - 1) {
         traverseInputs(MoveType.Forward, charPos + 1);
       }
     }
     else if (moveType === MoveType.Back) {
+      console.log('back', charPos)
       if (charPos === 0) {
         singleInputRef[charPos].shake();
-      } 
-      else if (validateIndex(charPos) && showChar[charPos - 1] === '1') {
+      }
+      else if (charPos > 0 && charPos <= inputLength - 1 && showChar[charPos - 1] === '1') {
         singleInputRef[charPos - 1].focus();
-      } 
+      }
       else if (charPos - 1 > 0) {
         traverseInputs(MoveType.Back, charPos - 1);
       }
@@ -83,9 +89,21 @@ const CharacterInput: React.FunctionComponent<CharacterInput> = (props: Characte
     singleInputRef[inputPos] = inputRef;
   };
 
-  const onKeyPress = (inputPos: number, event: any): void => {
-    if (event.key !== 'Backspace' && inputPos === 0) singleInputRef[inputPos].shake();
+  const onKeyPress = (inputPos: number, event: any, inputValue: string): void => {
+    console.log('onKeyPress')
+    if (event.key === 'Backspace') {
+      console.log('onKeyPress', {
+        inputPos,
+        inputValue
+      })
+      if (inputPos > 0 && inputValue.length === 0) traverseInputs(MoveType.Back, inputPos);
+      else if (inputPos === 0) singleInputRef[inputPos].shake();
+    }
   };
+
+  const clearInputOnFocus = (inputPos: number) => {
+    singleInputRef[inputPos].clear();
+  }
 
   return (
     <View
@@ -97,18 +115,21 @@ const CharacterInput: React.FunctionComponent<CharacterInput> = (props: Characte
       }}
     >
       {value.map((char: string, currentCharIndex: number) => (
-        <SingleInput
-          {...props}
-          key={currentCharIndex}
-          placeHolder={placeHolderCharArray[currentCharIndex]}
-          onChange={onChange}
-          index={currentCharIndex}
-          show={showChar[currentCharIndex] === '1'}
-          setRef={setInputRef}
-          keyboardType={props.keyboardType}
-          value={value[currentCharIndex]}
-          onKeyPress={onKeyPress}
-        />
+        showChar[currentCharIndex] === '1'
+          ? <SingleInput
+            {...props}
+            key={currentCharIndex}
+            placeHolder={placeHolderCharArray[currentCharIndex]}
+            onChange={onChange}
+            index={currentCharIndex}
+            show={showChar[currentCharIndex] === '1'}
+            setRef={setInputRef}
+            keyboardType={props.keyboardType}
+            value={value[currentCharIndex]}
+            onKeyPress={onKeyPress}
+            clearInputOnFocus={clearInputOnFocus}
+          />
+          : <Text>{placeHolderCharArray[currentCharIndex]}</Text>
       ))}
     </View>
   );
