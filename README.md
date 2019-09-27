@@ -1,6 +1,6 @@
 # react-native-character-input
 
-NPM [link](npmjs.com/package/react-native-character-input)
+NPM [link](https://www.npmjs.com/package/react-native-character-input)
 
 ## Getting started
 
