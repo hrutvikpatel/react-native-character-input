@@ -1,6 +1,12 @@
 # react-native-character-input
 
-# [ON NPM](https://www.npmjs.com/package/react-native-character-input)
+![platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS-brightgreen.svg?style=flat-square&colorB=191A17)
+[![npm](https://img.shields.io/npm/v/react-native-character-input.svg?style=flat-square)](https://www.npmjs.com/package/react-native-character-input)
+[![npm](https://img.shields.io/npm/dm/react-native-character-input.svg?style=flat-square&colorB=007ec6)](https://www.npmjs.com/package/react-native-character-input)
+[![github issues](https://img.shields.io/github/issues/hrutvikk/react-native-character-input.svg?style=flat-square)](https://github.com/hrutvikk/react-native-character-input/issues)
+[![github closed issues](https://img.shields.io/github/issues-closed/hrutvikk/react-native-character-input.svg?style=flat-square&colorB=44cc11)](https://github.com/hrutvikk/react-native-character-input/issues?q=is%3Aissue+is%3Aclosed)
+
+-----
 
 ## Getting started
 
@@ -11,7 +17,7 @@
 
 ## Usage
 
-![](underlined.gif)
+![](src/assets/img/underlined.gif)
 
 ```javascript
 <CharacterInput
@@ -23,7 +29,7 @@
 />
 ```
 
-![](outlined.gif)
+![](src/assets/img/outlined.gif)
 
 ```javascript
 <CharacterInput
@@ -35,7 +41,7 @@
 />
 ```
 
-![](contained.gif)
+![](src/assets/img/contained.gif)
 
 ```javascript
 <CharacterInput

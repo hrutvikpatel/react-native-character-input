@@ -1,6 +1,6 @@
 import { CharacterInput, MoveType, ICharacterInput } from './CharacterInput';
 import { SingleInput, InputType, ITypeRef, IInputStyle, ISingleInput  } from './SingleInput';
-import { UnderlinedStyles, OutlinedStyles, ContainedStyles } from './SingleInput.style';
+import { UnderlinedStyles, OutlinedStyles, ContainedStyles } from './assets/styles/SingleInput.style';
 
 // CharacterInput exports
 export {

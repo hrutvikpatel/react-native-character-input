@@ -3,7 +3,7 @@ import React from 'react';
 import { Input } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
 
-import * as Styles from './SingleInput.style';
+import * as Styles from './assets/styles/SingleInput.style';
 
 export enum InputType {
   Underlined = 'underlined',
