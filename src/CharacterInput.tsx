@@ -4,22 +4,22 @@ import { View, Text, StyleSheet } from 'react-native';
 import SingleInput, { ITypeRef, IInputStyle } from './SingleInput';
 
 
-enum MoveType {
+export enum MoveType {
   Forward,
   Back
 };
 
 // reexport in index
-export interface CharacterInput extends IInputStyle {
+export interface ICharacterInput extends IInputStyle {
   placeHolder: string,
   showCharBinary: string,
-  handleChange: (raw: string) => void,
+  handleChange: (value: string) => void,
   keyboardType?: string,
   permenantTextStyle?: StyleSheet.styles
 }
 
 
-const CharacterInput: React.FunctionComponent<CharacterInput> = (props: CharacterInput) => {
+export const CharacterInput: React.FunctionComponent<ICharacterInput> = (props: ICharacterInput) => {
   if (props.placeHolder.length !== props.showCharBinary.length)
     throw 'Length of placeHolder and showCharBinary strings must be the same';
 

@@ -5,16 +5,16 @@ import { StyleSheet } from 'react-native';
 
 import * as Styles from './SingleInput.style';
 
+export enum InputType {
+  Underlined = 'underlined',
+  Outlined = 'outlined',
+  Contained = 'contained'
+};
+
 export interface ITypeRef {
   focus: () => void;
   shake: () => void;
   clear: () => void;
-};
-
-enum InputType {
-  Underlined = 'underlined',
-  Outlined = 'outlined',
-  Contained = 'contained'
 };
 
 export interface IInputStyle {
@@ -23,9 +23,9 @@ export interface IInputStyle {
   inputStyle?: StyleSheet.styles,
   inputContainerStyle?: StyleSheet.styles,
   placeHolderTextColor?: StyleSheet.styles
-}
+};
 
-export interface ISingleInputProps extends IInputStyle {
+export interface ISingleInput extends IInputStyle {
   value: string,
   placeHolder: string,
   keyboardType: any,
@@ -36,7 +36,7 @@ export interface ISingleInputProps extends IInputStyle {
   clearInputOnFocus: (inputPos: number) => void
 }
 
-const SingleInput: React.FunctionComponent<ISingleInputProps> = (props: ISingleInputProps) => {
+export const SingleInput: React.FunctionComponent<ISingleInput> = (props: ISingleInput) => {
   const getStyles = (type: InputType): StyleSheet.styles => {
     if (type === InputType.Outlined) return Styles.OutlinedStyles;
     else if (type === InputType.Contained) return Styles.ContainedStyles;
