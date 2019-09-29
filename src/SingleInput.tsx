@@ -22,19 +22,16 @@ export interface IInputStyle {
   containerStyle?: StyleSheet.styles,
   inputStyle?: StyleSheet.styles,
   inputContainerStyle?: StyleSheet.styles,
-  disabledInputStyle?: StyleSheet.styles,
   placeHolderTextColor?: StyleSheet.styles
 }
 
 export interface ISingleInputProps extends IInputStyle {
   value: string,
   placeHolder: string,
-  show: boolean,
   keyboardType: any,
   index: number,
-  // Specify the actual function signature
-  onChange: Function,
-  setRef: (inputPos: number, inputRef: ITypeRef) => void,
+  onChange: (inputPos: number, char: string) => void,
+  setInputRef: (inputPos: number, inputRef: ITypeRef) => void,
   onKeyPress: (inputPos: number, event: any, inputValue: string) => void,
   clearInputOnFocus: (inputPos: number) => void
 }
@@ -58,16 +55,12 @@ const SingleInput: React.FunctionComponent<ISingleInputProps> = (props: ISingleI
       inputContainerStyle={[ 
         styles.inputContainerStyle,
         props.inputContainerStyle,
-        props.show ? {} : styles.hide
       ]}
-      disabledInputStyle={[ styles.disabledInputStyle, props.disabledInputStyle ]}
-      
+      onKeyPress={({nativeEvent}: any) => props.onKeyPress(props.index, nativeEvent, props.value)}
       onChangeText={(text: string) => props.onChange(props.index, text)}
-      disabled={!props.show}
-      ref={(ref: any) => props.setRef(props.index, ref)}
+      ref={(ref: any) => props.setInputRef(props.index, ref)}
       maxLength={1}
       keyboardType={props.keyboardType}
-      onKeyPress={(nativeEvent: any) => props.onKeyPress(props.index, nativeEvent, props.value)}
       onFocus={() => props.clearInputOnFocus(props.index)}
     />
   );

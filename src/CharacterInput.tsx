@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import SingleInput, { ITypeRef, IInputStyle } from './SingleInput';
 
@@ -14,7 +14,8 @@ export interface CharacterInput extends IInputStyle {
   placeHolder: string,
   showCharBinary: string,
   handleChange: (raw: string) => void,
-  keyboardType?: string
+  keyboardType?: string,
+  permenantTextStyle?: StyleSheet.styles
 }
 
 
@@ -25,8 +26,6 @@ const CharacterInput: React.FunctionComponent<CharacterInput> = (props: Characte
   const inputLength: number = props.placeHolder.length;
   const placeHolderCharArray: string[] = props.placeHolder.split('');
   const [value, setValue] = React.useState<string[]>(Array(inputLength).fill(''));
-  const [isLastInputFilled, setIsLastInputFilled] = React.useState<boolean>(false);
-
   const showChar: string[] = props.showCharBinary.split('');
   const singleInputRef: ITypeRef[] = [];
 
@@ -42,11 +41,6 @@ const CharacterInput: React.FunctionComponent<CharacterInput> = (props: Characte
 
   const traverseInputs = (moveType: MoveType, charPos: number): void => {
     if (moveType === MoveType.Forward) {
-      console.log('forward', {
-        charPos,
-        showChar: showChar[charPos + 1] === '1',
-      })
-
       if (charPos === inputLength - 1) {
         singleInputRef[charPos].shake();
       }
@@ -58,7 +52,6 @@ const CharacterInput: React.FunctionComponent<CharacterInput> = (props: Characte
       }
     }
     else if (moveType === MoveType.Back) {
-      console.log('back', charPos)
       if (charPos === 0) {
         singleInputRef[charPos].shake();
       }
@@ -76,10 +69,6 @@ const CharacterInput: React.FunctionComponent<CharacterInput> = (props: Characte
       traverseInputs(MoveType.Forward, inputPos);
       updateChangedChar(inputPos, char);
     }
-    else if (char.length === 0) {
-      traverseInputs(MoveType.Back, inputPos);
-      updateChangedChar(inputPos, char);
-    }
     else if (char.length > 1) {
       singleInputRef[inputPos].shake();
     }
@@ -90,19 +79,29 @@ const CharacterInput: React.FunctionComponent<CharacterInput> = (props: Characte
   };
 
   const onKeyPress = (inputPos: number, event: any, inputValue: string): void => {
-    console.log('onKeyPress')
     if (event.key === 'Backspace') {
-      console.log('onKeyPress', {
-        inputPos,
-        inputValue
-      })
-      if (inputPos > 0 && inputValue.length === 0) traverseInputs(MoveType.Back, inputPos);
-      else if (inputPos === 0) singleInputRef[inputPos].shake();
+      if (inputPos === 0) {
+        singleInputRef[inputPos].shake();
+      }
+      else if (inputPos === inputLength - 1) {
+        if (inputValue.length === 0) {
+          traverseInputs(MoveType.Back, inputPos);
+        }
+        else if (inputValue.length === 1) {
+          updateChangedChar(inputPos, ''); // user is trying to clear last input
+        }
+      }
+      else if (inputPos < inputLength - 1 && inputValue.length === 0) {
+        traverseInputs(MoveType.Back, inputPos); // user is trying to clear input so move back
+      }
     }
   };
 
   const clearInputOnFocus = (inputPos: number) => {
-    singleInputRef[inputPos].clear();
+    if (inputPos !== inputLength - 1) {
+      singleInputRef[inputPos].clear();
+      updateChangedChar(inputPos, '');
+    }
   }
 
   return (
@@ -122,14 +121,28 @@ const CharacterInput: React.FunctionComponent<CharacterInput> = (props: Characte
             placeHolder={placeHolderCharArray[currentCharIndex]}
             onChange={onChange}
             index={currentCharIndex}
-            show={showChar[currentCharIndex] === '1'}
-            setRef={setInputRef}
+            setInputRef={setInputRef}
             keyboardType={props.keyboardType}
             value={value[currentCharIndex]}
             onKeyPress={onKeyPress}
             clearInputOnFocus={clearInputOnFocus}
           />
-          : <Text>{placeHolderCharArray[currentCharIndex]}</Text>
+          : <Text
+            style={[
+              {
+                color: 'grey',
+                fontSize: 20,
+                fontWeight: 'bold',
+                width: 24,
+                textAlign: 'center',
+                alignSelf: 'center',
+                paddingBottom: 2,
+              },
+              props.permenantTextStyle
+            ]}
+          >
+            {placeHolderCharArray[currentCharIndex]}
+          </Text>
       ))}
     </View>
   );

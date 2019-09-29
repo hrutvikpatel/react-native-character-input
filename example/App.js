@@ -13,6 +13,9 @@ import { Platform, StyleSheet, Text, View } from 'react-native';
 import CharacterInput from 'react-native-character-input';
 
 export default class App extends Component {
+  state = {
+    value: ''
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -20,8 +23,25 @@ export default class App extends Component {
           placeHolder='YYYY/MM/DD'
           showCharBinary='1111011011'
           length={10}
-          handleChange={(text) => console.log('text', text)}
+          handleChange={(value) => console.log(value)}
           inputType='underlined'
+          keyboardType='numeric'
+        />
+        <CharacterInput
+          placeHolder='YYYY/MM/DD'
+          showCharBinary='1111011011'
+          length={10}
+          handleChange={(value) => console.log(value)}
+          inputType='outlined'
+          keyboardType='numeric'
+        />
+        <CharacterInput
+          placeHolder='YYYY/MM/DD'
+          showCharBinary='1111011011'
+          length={10}
+          handleChange={(value) => console.log(value)}
+          inputType='contained'
+          keyboardType='numeric'
         />
       </View>
     );
@@ -31,18 +51,8 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  }
 });
