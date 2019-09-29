@@ -70,8 +70,8 @@
 1) handleChange function will return both stripped and raw input values(both modifiable and disabled characters).
 2) Allow masked character inputs.
 	- Will implement a way to specify an object of keys to REGEX values. 
-	- This will allow you to specify a mask string of keys/permenant characters. Permenant characters are not mapped as keys and keys have an associated REGEX as its rule to change the character input value.
-	- This one will take me awhile :)
+	- This will allow you to specify a mask string of keys/permanent characters. Permanent characters are not mapped as keys and keys have an associated REGEX as its rule to change the character input value.
+	- This one will take me a while :)
 
 
 
