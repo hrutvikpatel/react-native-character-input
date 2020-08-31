@@ -35,6 +35,7 @@ export default class App extends Component {
           handleChange={(value) => this.setState({value})}
           inputType='underlined'
           keyboardType='numeric'
+          autoFocus={true}
         />
         <CharacterInput
           placeHolder='YYYY/MM/DD'

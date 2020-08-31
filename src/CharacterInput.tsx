@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import SingleInput, { ITypeRef, IInputStyle } from './SingleInput';
 
-
 export enum MoveType {
   Forward,
   Back
@@ -15,7 +14,8 @@ export interface ICharacterInput extends IInputStyle {
   showCharBinary: string,
   handleChange: (value: string) => void,
   keyboardType?: string,
-  permenantTextStyle?: StyleSheet.styles
+  permenantTextStyle?: StyleSheet.styles,
+  autoFocus?: boolean,
 }
 
 
@@ -28,6 +28,16 @@ export const CharacterInput: React.FunctionComponent<ICharacterInput> = (props: 
   const [value, setValue] = React.useState<string[]>(Array(inputLength).fill(''));
   const showChar: string[] = props.showCharBinary.split('');
   const singleInputRef: ITypeRef[] = [];
+
+  const findFirstInputIndex = () => {
+    for (let i = 0; i < showChar.length; i++) {
+      if (showChar[i] === '1') {
+        return i;
+      }
+    }
+
+    return -1;
+  };
 
   React.useEffect(() => {
     props.handleChange(value.join(''));
@@ -76,6 +86,16 @@ export const CharacterInput: React.FunctionComponent<ICharacterInput> = (props: 
 
   const setInputRef = (inputPos: number, inputRef: ITypeRef): void => {
     singleInputRef[inputPos] = inputRef;
+    
+    // if (props.autoFocus) {
+    //   for (let i = 0; i < showChar.length; i++) {
+    //     const isFirstInput = showChar[i] === '1' && i === inputPos && inputRef;
+    //     if (isFirstInput) {
+    //       singleInputRef[inputPos].focus();
+    //       break;
+    //     }
+    //   }
+    // }
   };
 
   const onKeyPress = (inputPos: number, event: any, inputValue: string): void => {
@@ -126,6 +146,7 @@ export const CharacterInput: React.FunctionComponent<ICharacterInput> = (props: 
             value={value[currentCharIndex]}
             onKeyPress={onKeyPress}
             clearInputOnFocus={clearInputOnFocus}
+            autoFocus={props.autoFocus && currentCharIndex === findFirstInputIndex()}
           />
           : <Text
             style={[

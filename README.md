@@ -65,6 +65,7 @@
 | inputStyle | StyleSheet | no | Input style of each character input |
 | inputContainerStyle | StyleSheet | no | Input container style of each character input |
 | placeHolderTextColor | StyleSheet | no | Place holder text color |
+| autoFocus | boolean | no | auto focus on first character input |
 
 ## Features to come
 1) handleChange function will return both stripped and raw input values(both modifiable and disabled characters).

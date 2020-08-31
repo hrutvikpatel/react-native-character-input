@@ -22,7 +22,8 @@ export interface IInputStyle {
   containerStyle?: StyleSheet.styles,
   inputStyle?: StyleSheet.styles,
   inputContainerStyle?: StyleSheet.styles,
-  placeHolderTextColor?: StyleSheet.styles
+  placeHolderTextColor?: StyleSheet.styles,
+  autoFocus: boolean,
 };
 
 export interface ISingleInput extends IInputStyle {
@@ -62,6 +63,7 @@ export const SingleInput: React.FunctionComponent<ISingleInput> = (props: ISingl
       maxLength={1}
       keyboardType={props.keyboardType}
       onFocus={() => props.clearInputOnFocus(props.index)}
+      autoFocus={props.autoFocus}
     />
   );
 };
