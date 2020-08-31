@@ -1,7 +1,7 @@
 {
   "name": "react-native-character-input",
   "title": "React Native Character Input",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Interactive character inputs that allow custom masking",
   "main": "src/index.js",
   "scripts": {
