@@ -118,10 +118,8 @@ export const CharacterInput: React.FunctionComponent<ICharacterInput> = (props: 
   };
 
   const clearInputOnFocus = (inputPos: number) => {
-    if (inputPos !== inputLength - 1) {
-      singleInputRef[inputPos].clear();
-      updateChangedChar(inputPos, '');
-    }
+    singleInputRef[inputPos].clear();
+    updateChangedChar(inputPos, '');
   }
 
   return (
