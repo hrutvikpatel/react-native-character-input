@@ -1,9 +1,9 @@
 {
   "name": "react-native-character-input",
   "title": "React Native Character Input",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Interactive character inputs that allow custom masking",
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
